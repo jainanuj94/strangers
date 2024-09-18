@@ -1,0 +1,17 @@
+{
+  "name": "strangers",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "author": "Anuj Jain",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "nodemon": "^3.1.4",
+    "socket.io": "^4.7.5"
+  }
+}
