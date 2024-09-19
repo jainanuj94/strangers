@@ -1,0 +1,17 @@
+<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+    <!-- Background circle for first person -->
+    <circle cx="60" cy="50" r="20" fill="#4A90E2"/>
+
+    <!-- First person -->
+    <circle cx="60" cy="45" r="10" fill="#fff"/>
+
+    <!-- Background circle for second person -->
+    <circle cx="140" cy="50" r="20" fill="#4A90E2"/>
+
+    <!-- Second person -->
+    <circle cx="140" cy="45" r="10" fill="#fff"/>
+
+    <!-- Chat bubble between the two persons -->
+    <rect x="85" y="35" width="30" height="20" rx="5" ry="5" fill="#50E3C2"/>
+    <polygon points="115,55 110,45 115,45" fill="#50E3C2"/>
+</svg>
