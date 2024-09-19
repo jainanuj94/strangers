@@ -48,6 +48,18 @@ export const showCallingDialog = (rejectCallHandler) => {
     dialog.appendChild(callingDialog);
 }
 
+export const showNoStrangerAvailableDialog = () => {
+    const infoDialog = elements.getInfoDialog("No Stranger Found", "No stranger is available to take the call")
+    if (infoDialog){
+        const dialog = document.getElementById("dialog");
+        dialog.appendChild(infoDialog);
+
+        setTimeout(() => {
+            removeAllDialogs();
+        }, 4000)
+    }
+}
+
 export const showInfoDialog = (preOfferAnswer) => {
     let infoDialog = null;
 
@@ -76,11 +88,13 @@ export const removeAllDialogs = () => {
 }
 
 export const showCallElements = (callType) => {
-    if (callType === constants.callType.CHAT_PERSONAL_CODE){
+    if (callType === constants.callType.CHAT_PERSONAL_CODE ||
+    callType === constants.callType.CHAT_STRANGER){
         showChatCallElements();
     }
 
-    if (callType === constants.callType.VIDEO_PERSONAL_CODE){
+    if (callType === constants.callType.VIDEO_PERSONAL_CODE ||
+        callType === constants.callType.VIDEO_STRANGER){
         showVideoCallElements();
     }
 }
@@ -198,6 +212,12 @@ export const updateUIAfterHangUp = (callType) => {
     removeAllDialogs();
 }
 
+// stranger
+export const updateStrangersCheckbox = (allowConnections) => {
+    const checkboxImg = document.getElementById("allow_strangers_checkbox_image");
+
+    allowConnections ? showElement(checkboxImg) : hideElement(checkboxImg);
+}
 // ui helper functions
 const enableDashboard = () => {
     const dashboardBlocker = document.getElementById("dashboard_blur");

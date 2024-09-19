@@ -43,7 +43,6 @@ export const createPeerConnection = () => {
 
         dataChannel.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log(message);
             ui.appendMessage(message.message, false);
         }
     }
@@ -74,7 +73,8 @@ export const createPeerConnection = () => {
     }
 
     // add out stream to peer connection
-    if (connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE) {
+    if (connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
+    connectedUserDetails.callType === constants.callType.VIDEO_STRANGER) {
         const localStream = store.getState().localStream;
 
         for (const track of localStream.getTracks()) {
@@ -101,10 +101,18 @@ export const sendPreOffer = (callType, calleePersonalCode) => {
         store.setCallState(constants.callState.CALL_UNAVAILABLE);
         wss.sendPreOffer(data);
     }
+
+    if (callType === constants.callType.VIDEO_STRANGER ||
+        callType === constants.callType.CHAT_STRANGER){
+        const data = {
+            callType, calleePersonalCode
+        }
+        store.setCallState(constants.callState.CALL_UNAVAILABLE);
+        wss.sendPreOffer(data);
+    }
 }
 
 export const handlePreOffer = (data) => {
-    console.log("pre-offer-came", data);
     const {callType, callerSocketId} = data;
 
     if (!checkCallPossibility()){
@@ -116,8 +124,15 @@ export const handlePreOffer = (data) => {
     }
 
     store.setCallState(constants.callState.CALL_UNAVAILABLE);
-    if (callType === constants.callType.CHAT_PERSONAL_CODE || callType === constants.callType.VIDEO_PERSONAL_CODE) {
+    if (callType === constants.callType.CHAT_PERSONAL_CODE ||
+        callType === constants.callType.VIDEO_PERSONAL_CODE) {
         ui.showIncomingCallDialog(callType, acceptCallHandler, rejectCallHandler);
+    }
+    if (callType === constants.callType.VIDEO_STRANGER ||
+        callType === constants.callType.CHAT_STRANGER){
+        createPeerConnection();
+        sendPreOfferAnswer(constants.preOfferAnswer.CALL_ACCEPTED);
+        ui.showCallElements(connectedUserDetails.callType);
     }
 }
 const sendPreOfferAnswer = (preOfferAnswer, callerSocketId = null) => {
@@ -133,7 +148,6 @@ const sendPreOfferAnswer = (preOfferAnswer, callerSocketId = null) => {
 export const handlePreOfferAnswer = (data) => {
     const {preOfferAnswer} = data;
     ui.removeAllDialogs();
-    console.log(preOfferAnswer)
     if (preOfferAnswer === constants.preOfferAnswer.CALLEE_NOT_FOUND) {
         // show dialog callee not found
         ui.showInfoDialog(preOfferAnswer);

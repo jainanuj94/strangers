@@ -1,6 +1,6 @@
 import express from "express";
 import http from "http";
-import { Server } from "socket.io";
+import {Server} from "socket.io";
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,7 +11,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 let connectedPeers = [];
-
+let connectedPeersStrangers = [];
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
@@ -59,8 +59,36 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("stranger-connection-status", (data) => {
+    const { status } = data;
+
+    if (status){
+      connectedPeersStrangers.push(socket.id);
+    }else{
+      connectedPeersStrangers = connectedPeersStrangers.filter((p) => p !== socket.id);
+    }
+  })
+
+  socket.on("get-stranger-socket-id", () => {
+    let randomStrangerSocketId;
+    const availableSocketIds = connectedPeersStrangers.filter((peer) => peer !== socket.id);
+
+    if (availableSocketIds.length > 0){
+      randomStrangerSocketId = availableSocketIds[Math.floor(Math.random() * availableSocketIds.length)];
+    } else {
+      randomStrangerSocketId = null;
+    }
+
+    const data = {
+      randomStrangerSocketId
+    }
+
+    io.to(socket.id).emit("stranger-socket-id", data);
+  })
+
   socket.on("disconnect", () => {
     connectedPeers = connectedPeers.filter((peer) => peer !== socket.id);
+    connectedPeersStrangers = connectedPeersStrangers.filter((peer) => peer !== socket.id)
     console.log("user disconnected", socket.id);
   });
 });

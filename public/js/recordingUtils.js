@@ -28,7 +28,6 @@ export const resumeRecording = () => {
 
 const downloadRecordedVideo = () => {
     const blob = new Blob(recordedChunks, {type: 'video/webm'});
-    console.log(recordedChunks)
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     document.body.appendChild(a);
