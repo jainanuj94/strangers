@@ -119,6 +119,19 @@ export const updateCameraButton = (cameraActive) => {
     micButtonImage.src = cameraActive ? cameraOffImgSrc : cameraOnImgSrc;
 }
 
+// ui messages
+export  const appendMessage = (message, right = false) => {
+    const messageContainer = document.getElementById("messages_container");
+    const messageElement = right ? elements.getRightMessage(message) : elements.getLeftMessage(message);
+
+    messageContainer.appendChild(messageElement);
+}
+
+export const clearMessenger = () => {
+    const messageContainer = document.getElementById("messages_container");
+    messageContainer.querySelectorAll("*").forEach((n) => n.remove());
+}
+
 // ui helper functions
 const enableDashboard = () => {
     const dashboardBlocker = document.getElementById("dashboard_blur");
