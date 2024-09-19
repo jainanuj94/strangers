@@ -8,7 +8,7 @@ const app = express();
 app.use(express.static("public"));
 
 const server = http.createServer(app);
-const io = new Server(server, { addTrailingSlash: false});
+const io = new Server(server);
 
 let connectedPeers = [];
 let connectedPeersStrangers = [];
