@@ -1,4 +1,5 @@
 import * as constants from "./constants.js";
+import * as store from "./store.js";
 import * as elements from "./elements.js";
 
 export const updatePersonalCode = (personalCode) => {
@@ -15,6 +16,13 @@ export const updateLocalVideo = (stream) => {
     })
 }
 
+export const showVideoCallButtons = () => {
+    const personalCodeVideoButton = document.getElementById("personal_code_video_button")
+    const strangerVideoButton = document.getElementById("stranger_call_video_button")
+
+    showElement(personalCodeVideoButton);
+    showElement(strangerVideoButton);
+}
 export const updateRemoteVideo = (stream) => {
     const remoteVideo = document.getElementById("remote_video");
     remoteVideo.srcObject = stream;

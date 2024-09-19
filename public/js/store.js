@@ -1,16 +1,25 @@
+import * as constants from "./constants.js";
 let state = {
     socketId: null,
     localStream: null,
     remoteStream: null,
     screenSharingStream: null,
     allowConnectionsFromStrangers: false,
-    screenSharingActive: false
+    screenSharingActive: false,
+    callState : constants.callState.CALL_AVAILABLE_ONLY_CHAT,
 };
 
 export const setSocketId = (socketId) => {
     state = {
         ...state,
         socketId
+    }
+};
+
+export const setCallState = (callState) => {
+    state = {
+        ...state,
+        callState
     }
 };
 
